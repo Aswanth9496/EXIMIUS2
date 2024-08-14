@@ -1,0 +1,142 @@
+<%- include('../Layout/user/hedder.ejs') -%>
+
+<body>
+  <div class="container-scroller">
+    <!-- Sidebar -->
+    <nav class="sidebar" style="background-color: #040404; color: #fff; width: 200px; height: 100vh; position: fixed; top: 0; left: 0; padding-top: 60px; overflow-y: auto;">
+      <ul class="nav flex-column" style="list-style-type: none; padding: 0; margin: 0;">
+        <!-- Profile Section -->
+        <li class="nav-item profile" style="padding: 15px; border-bottom: 1px solid #f6f8f9;">
+          <div class="profile-desc" style="display: flex; align-items: center;">
+            <div class="profile-pic">
+              <div class="count-indicator" style="position: relative;">
+                <img class="img-xs rounded-circle" src="assets/images/faces/face15.jpg" alt="" style="width: 50px; height: 50px;"/>
+                <span class="count bg-success" style="position: absolute; bottom: 0; right: 0; width: 15px; height: 15px; border-radius: 50%;"></span>
+              </div>
+            </div>
+            <div class="profile-name" style="margin-left: 10px;">
+              <h5 class="mb-0 font-weight-normal" style="font-size: 14px;">Henry Klein</h5>
+              <span style="font-size: 12px;">Gold Member</span>
+            </div>
+          </div>
+        </li>
+        <!-- Navigation Items -->
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/dashboard" style="color: #fbfbfc; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-tachometer-alt" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/product" style="color: #fbfbfc; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-box" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Product</span>
+          </a>
+        </li>
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/user" style="color: #fcfdfe; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-users" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">User</span>
+          </a>
+        </li>
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/order" style="color: #fdfdfd; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-shopping-cart" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Order</span>
+          </a>
+        </li>
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/coupon" style="color: #f9fafa; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-tags" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Coupon</span>
+          </a>
+        </li>
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/banner" style="color: #fafafb; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-image" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Banner</span>
+          </a>
+        </li>
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/categories" style="color: #f8f9fb; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-list" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Categories</span>
+          </a>
+        </li>
+        <li class="nav-item" style="border-bottom: 1px solid #495057;">
+          <a class="nav-link" href="/brands" style="color: #fdfdfd; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-industry" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Brands</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout" style="color: #f6f9fc; display: block; padding: 10px; text-decoration: none;">
+            <i class="fas fa-sign-out-alt" style="font-size: 16px;"></i>
+            <span class="menu-title" style="margin-left: 10px;">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <div class="container-fluid" style="margin-left: 200px; padding-top: 40px; width: calc(100% - 200px); background-image: url('https://img.freepik.com/free-vector/realistic-neon-lights-background_23-2148907367.jpg'); background-size: cover; background-position: center; min-height: 100vh;">
+      <!-- Main Panel -->
+      <div class="main-panel" style="width: 100%; margin: 0 auto;">
+        <div class="content-wrapper">
+          
+          <!-- Additional Content -->
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Orders</h4>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th></th> <!-- Added Column for View Button -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>#ORD1234</td>
+                        <td>John Doe</td>
+                        <td><span class="badge badge-outline-success">Completed</span></td>
+                        <td>$123.45</td>
+                        <td><a href="/order-details/ORD1234" class="btn btn-primary btn-sm">View</a></td> <!-- View Button -->
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>#ORD1235</td>
+                        <td>Jane Smith</td>
+                        <td><span class="badge badge-outline-warning">Pending</span></td>
+                        <td>$67.89</td>
+                        <td><a href="/order-details/ORD1235" class="btn btn-primary btn-sm">View</a></td> <!-- View Button -->
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>#ORD1236</td>
+                        <td>Emily Johnson</td>
+                        <td><span class="badge badge-outline-danger">Cancelled</span></td>
+                        <td>$45.00</td>
+                        <td><a href="/order-details/ORD1236" class="btn btn-primary btn-sm">View</a></td> <!-- View Button -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<%- include('../Layout/user/footer.ejs') -%>

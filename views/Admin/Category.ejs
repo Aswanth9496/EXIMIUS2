@@ -1,0 +1,207 @@
+<%- include('../Layout/admin/headder.ejs') -%>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo" href="index.html"><img src="images/logo.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <div class="search-field ml-4 d-none d-md-block"></div>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item d-none d-lg-block full-screen-link">
+            <a class="nav-link">
+              <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="dashboard.html">
+              <span class="menu-title">Dashboard</span>
+              <i class="mdi mdi-home menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="products.html">
+              <span class="menu-title">Products</span>
+              <i class="mdi mdi-cube menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="users.html">
+              <span class="menu-title">Users</span>
+              <i class="mdi mdi-account menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="orders.html">
+              <span class="menu-title">Orders</span>
+              <i class="mdi mdi-cart menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="coupons.html">
+              <span class="menu-title">Coupons</span>
+              <i class="mdi mdi-ticket-percent menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="banners.html">
+              <span class="menu-title">Banners</span>
+              <i class="mdi mdi-image-area menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="categories.html">
+              <span class="menu-title">Categories</span>
+              <i class="mdi mdi-folder-multiple menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="brands.html">
+              <span class="menu-title">Brands</span>
+              <i class="mdi mdi-apple menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="logout.html">
+              <span class="menu-title">Logout</span>
+              <i class="mdi mdi-logout menu-icon"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-12 text-center mb-4">
+              <!-- Button to trigger the modal -->
+              <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#addCategoryModal">Add New Category</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Category Management</h4>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Category Name</th>
+                          <th>Status</th>
+                          <th>Update</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Category 1</td>
+                          <td><label class="badge badge-gradient-success">Active</label></td>
+                          <td><a href="#" class="btn btn-primary">Update</a></td>
+                          <td>
+                            <button class="btn btn-outline-success list-btn">List</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Category 2</td>
+                          <td><label class="badge badge-gradient-warning">Inactive</label></td>
+                          <td><a href="#" class="btn btn-primary">Update</a></td>
+                          <td>
+                            <button class="btn btn-outline-success list-btn">List</button>
+                          </td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="footer">
+          <!-- footer content -->
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for adding a new category -->
+  <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/add-category" method="POST">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="categoryName">Category Name</label>
+              <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+            </div>
+            <div class="form-group">
+              <label for="categoryDescription">Category Description</label>
+              <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="3" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add SweetAlert library -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Include your custom JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const listButtons = document.querySelectorAll('.list-btn');
+
+      listButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const isListing = button.classList.contains('btn-outline-success');
+          const actionText = isListing ? 'List' : 'Unlist';
+          const newClass = isListing ? 'btn-outline-danger' : 'btn-outline-success';
+          const newText = isListing ? 'Unlist' : 'List';
+
+          Swal.fire({
+            title: `Are you sure you want to ${actionText} this category?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: `${actionText}`,
+            cancelButtonText: 'Cancel'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              button.textContent = newText;
+              button.classList.remove('btn-outline-success', 'btn-outline-danger');
+              button.classList.add(newClass);
+              Swal.fire({
+                title: `Category has been ${actionText === 'List' ? 'listed' : 'unlisted'}.`,
+                icon: 'success'
+              });
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+<%- include('../Layout/admin/footer.ejs') -%>
