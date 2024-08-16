@@ -3,8 +3,6 @@ const nodemailer = require('nodemailer');
 const session = require('express-session');
 
 
-
-
 // Nodemailer transporter setup
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -71,16 +69,17 @@ const registerUser = async (req, res) => {
 
          // Store user data in session
          req.session.user = {
-            Name: name,
-            Email: email,
-            password,
-            mobile
+            name: name,
+            email: email,
+            password:password,
+            mobile:mobile
         };
       
+       
         
          // Store OTP in session or temporary storage 
         req.session.otp = OTP;
-
+       
         res.redirect('/OTP'); // Redirect to OTP page
         }
  
@@ -106,18 +105,16 @@ const lodeOTPpage = async (req, res) => {
 const verifiyingOTP = async (req,res)=>{
     try {
 
-        const OTP = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4;
-
+        let OTP = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4;
+               
+             
         if (req.session.otp === OTP) {
-        
-            console.log('sucess');
-            
-            const { Name, Email, password, mobile } = req.session.user;
-            
-            
+
+            const { name, email, password, mobile } = req.session.user;
+             
             const newUser = new User({
-                Name,
-                Email,
+                name,
+                email,
                 password,
                 mobile,
                 verified: true // Set user as verified
@@ -143,9 +140,28 @@ const verifiyingOTP = async (req,res)=>{
 };
 
 
+const resendOTP = async (req,res)=>{
+    try {
+
+       let newOTP = generateOTP();
+      
+       let email = req.session.user.email;
+       req.session.otp = newOTP;
+            
+       sendMail(email, newOTP);
+       res.render('OTP.ejs', { message: "otp resend sucessfull" });
+
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+
 module.exports ={
     lodeOTPpage,
     verifiyingOTP,
     loadRegister,
-    registerUser
+    registerUser,
+    resendOTP
 }

@@ -1,0 +1,46 @@
+<%- include('../Layout/admin/headder.ejs') -%>
+
+<section class="vh-100 d-flex align-items-center" style="background: linear-gradient(135deg, #1d2b64, #e10e4d); min-height: 100vh;">
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col col-xl-6">
+                <div class="card shadow-lg" style="border-radius: 20px;">
+                    <div class="row g-0">
+                        <div class="col-lg-12 d-flex align-items-center">
+                            <div class="card-body p-5 text-black">
+                                <!-- Admin Login Form -->
+                                <form action="/admin/login" method="POST">
+                                    <div class="text-center mb-5">
+                                        <i class="fas fa-user-shield fa-3x" style="color: #f8cdda;"></i>
+                                        <h2 class="fw-bold text-uppercase mt-3">Admin Login</h2>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="email" id="adminEmail" name="email" class="form-control form-control-lg" required style="border-radius: 10px;" />
+                                        <label class="form-label" for="adminEmail">Email address</label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="password" id="adminPassword" name="password" class="form-control form-control-lg" required style="border-radius: 10px;" />
+                                        <label class="form-label" for="adminPassword">Password</label>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color: #1d2b64; border-radius: 10px;">Login</button>
+                                    </div>
+                                </form>
+                                <!-- Form ends here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<%- include('../Layout/admin/footer.ejs') -%>
+
+

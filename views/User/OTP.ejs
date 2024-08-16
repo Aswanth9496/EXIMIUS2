@@ -77,44 +77,73 @@
             </div>
         </div>
     </div>
+    
 
     <!-- Bootstrap 5 JavaScript and dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.bundle.min.js" integrity="sha512-sYJ4eCeQ3VxFxWB5f5zG/I4/fN4JCB9K1my+0Gm/6kUdzVIGS6yihIEl8hpAcgS61WSm5blKJucfMdwQHYBf2A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <script>
         let timeLeft = 30; // 30 seconds countdown
-        const countdownElement = document.getElementById('countdown');
-        const resendLink = document.getElementById('resendLink');
+const countdownElement = document.getElementById('countdown');
+const resendLink = document.getElementById('resendLink');
+let timer; // Initialize timer variable
 
-        // Timer function
-        const timer = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                resendLink.style.pointerEvents = "auto";
-                resendLink.style.opacity = "1";
-                resendLink.innerHTML = "Click to resend.";
-            } else {
-                countdownElement.innerHTML = timeLeft;
-                timeLeft--;
-            }
-        }, 1000);
+// Function to start the timer
+function startTimer() {
+    timeLeft = 30;
+    resendLink.style.pointerEvents = "none";
+    resendLink.style.opacity = "0.5";
+    
+    timer = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            resendLink.style.pointerEvents = "auto";
+            resendLink.style.opacity = "1";
+            resendLink.innerHTML = "Click to resend.";
+        } else {
+            countdownElement.innerHTML = timeLeft;
+            timeLeft--;
+        }
+    }, 1000);
+}
 
-        // Automatically move to next input field on keypress
-        document.querySelectorAll('.otp-letter-input').forEach((input, index, array) => {
-            input.addEventListener('input', () => {
-                if (input.value.length === input.maxLength && index < array.length - 1) {
-                    array[index + 1].focus();
-                }
-            });
-        });
+// Automatically move to next input field on keypress
+document.querySelectorAll('.otp-letter-input').forEach((input, index, array) => {
+    input.addEventListener('input', () => {
+        if (input.value.length === input.maxLength && index < array.length - 1) {
+            array[index + 1].focus();
+        }
+    });
+});
 
-        // Handle the resend click (optional)
-        resendLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Trigger the OTP resend functionality here
-            alert('Resend OTP functionality triggered!');
-            // Optionally, reset the timer if needed
-        });
+// Handle the resend click (POST to /resendOTP)
+resendLink.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    // Trigger the OTP resend functionality
+    fetch('/resendOTP', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        // Optionally send data if needed
+        body: JSON.stringify({ /* Any required data */ })
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // Optionally handle successful response
+        alert('OTP resent successfully!');
+        
+        // Restart the timer after resending OTP
+        clearInterval(timer);
+        startTimer(); // Restart the timer
+    }).catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+});
+
+// Start the initial timer on page load
+startTimer();
     </script>
-</body>
+        </body>
 </html>

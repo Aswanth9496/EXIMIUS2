@@ -10,8 +10,8 @@ const flash = require('connect-flash');
 const app = express();
 
 // Set 'public' as the static folder
-app.use(express.static(path.join(__dirname, './public/user')))
-app.use('/admin', express.static(path.join(__dirname, './public/admin')))
+app.use(express.static(path.join(__dirname, './public/user')));
+app.use('/admin', express.static(path.join(__dirname, './public/admin')));
 
 // Morgan for logging
 app.use(morgan('dev'));
@@ -21,11 +21,8 @@ app.use(session({
     secret: 'yourSecretKey',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } 
+    cookie: { secure: false }
 }));
-
-
-app.set('views', path.join(__dirname, 'views/user'));
 
 // Passport middleware
 app.use(passport.initialize());
@@ -36,17 +33,22 @@ app.use(flash());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Import the routes from the routes directory
-const userRoutes = require('./routes/userRoutes');
-const adminRoutes = require('./routes/adminRoutes')
+// Set view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views/user'));
 
-const dbConnect = require('./config/db.Connect');
+// Import routes
+const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+
 // MongoDB connection
+const dbConnect = require('./config/db.Connect');
 dbConnect();
 
+// Use routes
 app.use('/', userRoutes);
 app.use('/admin', adminRoutes);
 
-// Start Server
-const PORT = process.env.PORT || 5000
+// Start server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -20,6 +20,7 @@ router.post('/register', userRegistration.registerUser);
 // OTP page and verification
 router.get('/OTP', userRegistration.lodeOTPpage);
 router.post('/OTP', userRegistration.verifiyingOTP);
+router.post('/resendOTP',userRegistration.resendOTP);
 
 // Google OAuth routes
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

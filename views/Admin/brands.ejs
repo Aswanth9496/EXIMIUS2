@@ -24,55 +24,55 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="dashboard.html">
+            <a class="nav-link" href="/admin/dashbord">
               <span class="menu-title">Dashboard</span>
               <i class="mdi mdi-home menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="products.html">
+            <a class="nav-link" href="/admin/Products">
               <span class="menu-title">Products</span>
               <i class="mdi mdi-cube menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="users.html">
+            <a class="nav-link" href="/admin/Users">
               <span class="menu-title">Users</span>
               <i class="mdi mdi-account menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="orders.html">
+            <a class="nav-link" href="/admin/Orders">
               <span class="menu-title">Orders</span>
               <i class="mdi mdi-cart menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="coupons.html">
+            <a class="nav-link" href="/admin/Coupon">
               <span class="menu-title">Coupons</span>
               <i class="mdi mdi-ticket-percent menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="banners.html">
+            <a class="nav-link" href="/admin/Banners">
               <span class="menu-title">Banners</span>
               <i class="mdi mdi-image-area menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="categories.html">
+            <a class="nav-link" href="/admin/Category">
               <span class="menu-title">Categories</span>
               <i class="mdi mdi-folder-multiple menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="brands.html">
+            <a class="nav-link" href="/admin/brand">
               <span class="menu-title">Brands</span>
               <i class="mdi mdi-apple menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="logout.html">
+            <a class="nav-link" href="/admin/Logout">
               <span class="menu-title">Logout</span>
               <i class="mdi mdi-logout menu-icon"></i>
             </a>
@@ -105,24 +105,26 @@
                         </tr>
                       </thead>
                       <tbody>
+                        <% brands.forEach(brand => { %>
                         <tr>
-                          <td>Brand 1</td>
-                          <td><label class="badge badge-gradient-success">Active</label></td>
-                          <td><a href="#" class="btn btn-primary">Update</a></td>
-                          <td>
-                            <button class="btn btn-outline-success list-btn">List</button>
-                          </td>
+                            <td><%= brand.BrandName %></td>
+                            <td>
+                                <% if (brand.status === 'Active') { %>
+                                <label class="badge badge-gradient-success">Active</label>
+                                <% } else { %>
+                                <label class="badge badge-gradient-warning">Inactive</label>
+                                <% } %>
+                            </td>
+                            <td><a href="#" class="btn btn-primary">Update</a></td>
+                            <td>
+                                <button class="btn btn-outline-success list-btn">
+                                    <%= brand.status === 'Active' ? 'Unlist' : 'List' %>
+                                </button>
+                            </td>
                         </tr>
-                        <tr>
-                          <td>Brand 2</td>
-                          <td><label class="badge badge-gradient-warning">Inactive</label></td>
-                          <td><a href="#" class="btn btn-primary">Update</a></td>
-                          <td>
-                            <button class="btn btn-outline-success list-btn">List</button>
-                          </td>
-                        </tr>
-                        <!-- Add more rows as needed -->
-                      </tbody>
+                        <% }); %>
+                    </tbody>
+                    
                     </table>
                   </div>
                 </div>
@@ -147,7 +149,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="/add-brand" method="POST">
+        <form action="/admin/add-brand" method="POST">
           <div class="modal-body">
             <div class="form-group">
               <label for="brandName">Brand Name</label>
@@ -169,10 +171,24 @@
 
   <!-- Add SweetAlert library -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Include your custom JS -->
-  <script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Add SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Custom JS -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Your custom scripts here
+  });
+
+  <!-- Custom JS -->
+  
     document.addEventListener('DOMContentLoaded', function () {
+      // SweetAlert for listing/unlisting brands
       const listButtons = document.querySelectorAll('.list-btn');
 
       listButtons.forEach(button => {
@@ -201,7 +217,29 @@
           });
         });
       });
+
+      // SweetAlert for confirming brand addition
+      const addBrandForm = document.querySelector('#addBrandModal form');
+      addBrandForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        Swal.fire({
+          title: 'Are you sure you want to add this brand?',
+          text: "Make sure all the details are correct.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, add it!',
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // If confirmed, submit the form
+            addBrandForm.submit();
+          }
+        });
+      });
     });
+
+    
   </script>
 </body>
 <%- include('../Layout/admin/footer.ejs') -%>

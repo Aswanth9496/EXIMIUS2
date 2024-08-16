@@ -8,10 +8,14 @@ const brandShema = new mongoose.Schema({
         type: String,
         required: true,
       },
-      discription:{
+      description:{
         type : String,
         required:true
-      }
+      },
+      status: {
+        type: String,
+        default: 'Active', 
+    }
 });
 
 
