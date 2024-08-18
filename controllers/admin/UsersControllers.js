@@ -1,4 +1,5 @@
 const User = require('../../models/userModel');
+
 const LoadUserManagement = async (req,res)=>{
 
     try {
@@ -9,6 +10,7 @@ const LoadUserManagement = async (req,res)=>{
     } catch (error) {
         
      console.log(error);
+     res.status(500).send('Server Error');
       
     }
 };

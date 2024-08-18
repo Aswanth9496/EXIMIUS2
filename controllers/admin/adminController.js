@@ -7,7 +7,7 @@ const loadAdminLoginPage = async (req,res)=>{
         res.render('adminLogin')
     } catch (error) {
         console.log(error);
-        
+        res.status(500).send('Server Error');
     }
 }
 
@@ -49,7 +49,7 @@ const loadDashbord = async (req,res)=>{
     } catch (error) {
 
         console.log(error.massage);
-        
+        res.status(500).send('Server Error');
     }
 };
 
@@ -59,7 +59,7 @@ const adminLogout = async(req,res)=>{
         res.redirect('/admin');
     } catch (error) {
         console.log(error);
-        
+        res.status(500).send('Server Error');
     }
 }
 

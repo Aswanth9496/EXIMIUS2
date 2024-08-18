@@ -9,7 +9,6 @@
         <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
-        <div class="search-field ml-4 d-none d-md-block"></div>
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item d-none d-lg-block full-screen-link">
             <a class="nav-link">
@@ -30,7 +29,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/Products">
+            <a class="nav-link" href="/admin/Product">
               <span class="menu-title">Products</span>
               <i class="mdi mdi-cube menu-icon"></i>
             </a>
@@ -66,7 +65,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/brand">
+            <a class="nav-link" href="/admin/brands">
               <span class="menu-title">Brands</span>
               <i class="mdi mdi-apple menu-icon"></i>
             </a>
@@ -115,16 +114,23 @@
                                 <label class="badge badge-gradient-warning">Inactive</label>
                                 <% } %>
                             </td>
-                            <td><a href="#" class="btn btn-primary">Update</a></td>
                             <td>
-                                <button class="btn btn-outline-success list-btn">
+                              <button class="btn btn-primary" 
+                                      data-toggle="modal" 
+                                      data-target="#updateBrandModal" 
+                                      data-id="<%= brand._id %>" 
+                                      data-name="<%= brand.BrandName %>" 
+                                      data-description="<%= brand.description %>">Update</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-success toggle-status-btn" 
+                                        data-id="<%= brand._id %>">
                                     <%= brand.status === 'Active' ? 'Unlist' : 'List' %>
                                 </button>
                             </td>
                         </tr>
                         <% }); %>
-                    </tbody>
-                    
+                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -169,77 +175,136 @@
     </div>
   </div>
 
-  <!-- Add SweetAlert library -->
+  <!-- Modal for updating a brand -->
+  <div class="modal fade" id="updateBrandModal" tabindex="-1" role="dialog" aria-labelledby="updateBrandModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateBrandModalLabel">Update Brand</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="updateBrandName">Brand Name</label>
+            <input type="text" class="form-control" id="updateBrandName" name="brandName" required>
+          </div>
+          <div class="form-group">
+            <label for="updateBrandDescription">Brand Description</label>
+            <textarea class="form-control" id="updateBrandDescription" name="brandDescription" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveBrandBtn">Update Brand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SweetAlert & JS Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- Add SweetAlert library -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Custom JS -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Your custom scripts here
-  });
-
-  <!-- Custom JS -->
-  
+  <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // SweetAlert for listing/unlisting brands
-      const listButtons = document.querySelectorAll('.list-btn');
+      // Populate update modal with current data
+      $('#updateBrandModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var brandId = button.data('id');
+        var brandName = button.data('name');
+        var brandDescription = button.data('description');
 
-      listButtons.forEach(button => {
-        button.addEventListener('click', function () {
-          const isListing = button.classList.contains('btn-outline-success');
-          const actionText = isListing ? 'List' : 'Unlist';
-          const newClass = isListing ? 'btn-outline-danger' : 'btn-outline-success';
-          const newText = isListing ? 'Unlist' : 'List';
+        var modal = $(this);
+        modal.find('#updateBrandName').val(brandName);
+        modal.find('#updateBrandDescription').val(brandDescription);
 
-          Swal.fire({
-            title: `Are you sure you want to ${actionText} this brand?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: `${actionText}`,
-            cancelButtonText: 'Cancel'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              button.textContent = newText;
-              button.classList.remove('btn-outline-success', 'btn-outline-danger');
-              button.classList.add(newClass);
+        // Handle update brand form submission
+        $('#saveBrandBtn').on('click', function () {
+          var updatedBrandName = modal.find('#updateBrandName').val();
+          var updatedBrandDescription = modal.find('#updateBrandDescription').val();
+          
+
+          fetch(`/admin/update-brand/${brandId}`, {
+            method: 'Post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              brandName: updatedBrandName,
+              brandDescription: updatedBrandDescription
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
               Swal.fire({
-                title: `Brand has been ${actionText === 'List' ? 'listed' : 'unlisted'}.`,
+                title: 'Brand updated successfully!',
                 icon: 'success'
+              }).then(() => {
+                location.reload();
+              });
+            } else {
+              Swal.fire({
+                title: 'Error updating brand!',
+                icon: 'error'
               });
             }
+          })
+          .catch(error => {
+            Swal.fire({
+              title: 'Error!',
+              text: error.message,
+              icon: 'error'
+            });
+            console.error('Error:', error);
           });
         });
       });
 
-      // SweetAlert for confirming brand addition
-      const addBrandForm = document.querySelector('#addBrandModal form');
-      addBrandForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent the default form submission
+      // Handle toggle status button click
+      const toggleStatusButtons = document.querySelectorAll('.toggle-status-btn');
 
-        Swal.fire({
-          title: 'Are you sure you want to add this brand?',
-          text: "Make sure all the details are correct.",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, add it!',
-          cancelButtonText: 'Cancel'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // If confirmed, submit the form
-            addBrandForm.submit();
-          }
+      toggleStatusButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const brandId = this.dataset.id;
+             console.log(brandId+"hi");
+             
+          fetch(`/admin/toggle-status/${brandId}`, {
+            method: 'Post',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'Active') {
+              this.textContent = 'Unlist';
+              this.classList.remove('btn-outline-danger');
+              this.classList.add('btn-outline-success');
+            } else {
+              this.textContent = 'List';
+              this.classList.remove('btn-outline-success');
+              this.classList.add('btn-outline-danger');
+            }
+
+            Swal.fire({
+              title: 'Brand status updated!',
+              icon: 'success'
+            });
+            location.reload()
+          })
+          .catch(error => {
+            Swal.fire({
+              title: 'Error updating status!',
+              icon: 'error'
+            });
+            console.error('Error:', error);
+          });
         });
       });
     });
-
-    
   </script>
 </body>
-<%- include('../Layout/admin/footer.ejs') -%>

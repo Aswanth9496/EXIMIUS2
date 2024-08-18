@@ -116,7 +116,7 @@
                                 <tr>
                                   <td><%= category.name %></td>
                                   <td><label class="badge <%= category.status ? 'badge-gradient-success' : 'badge-gradient-warning' %>"><%= category.status ? 'Active' : 'Inactive' %></label></td>
-                                  <td><a href="#" class="btn btn-primary">Update</a></td>
+                                  <td><a href="#" class="btn btn-primary update-btn" data-id="<%= category._id %>" data-name="<%= category.name %>">Update</a></td>
                                   <td>
                                     <button class="btn <%= category.status ? 'btn-outline-danger' : 'btn-outline-success' %> list-btn" data-id="<%= category._id %>" data-status="<%= category.status ? 'unlist' : 'list' %>"><%= category.status ? 'Unlist' : 'List' %></button>
                                   </td>
@@ -164,6 +164,35 @@
                 </div>
               </div>
     
+              <!-- Modal for Updating Category -->
+              <div class="modal fade" id="updateCategoryModal" tabindex="-1" role="dialog" aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="updateCategoryModalLabel">Update Category</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="updateCategoryForm" action="" method="POST">
+                        <input type="hidden" id="categoryId" name="categoryId" value="">
+                        <div class="form-group">
+                          <label for="updateCategoryName">Category Name</label>
+                          <input type="text" class="form-control" id="updateCategoryName" name="categoryName" placeholder="Enter new category name" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                      </form>
+                      
+                      
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
               <!-- Footer code -->
               <footer class="footer"></footer>
             </div>
@@ -176,8 +205,93 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!-- Include your custom JS -->
+        <script>
+          $(document).ready(function() {
+            // Handle update button click
+            $('.update-btn').click(function() {
+              const categoryId = $(this).data('id');
+              const categoryName = $(this).data('name');
+              
+              // Set the values in the modal
+              $('#categoryId').val(categoryId);
+              $('#updateCategoryName').val(categoryName);
+              
+              // Show the modal
+              $('#updateCategoryModal').modal('show');
+            });
+
+            let form = document.getElementById('updateCategoryForm')
+            form.addEventListener('submit', async(event)=>{
+              event.preventDefault()
+
+              const obj = {
+                categoryId : form[0].value,
+                categoryName : form[1].value
+              }
+
+              console.log(obj);
+              
+
+              const resp = await fetch('/admin/update-category-name', {
+                method:'POST',
+                headers:{
+                  'Content-type':'application/json'
+                },
+                body:JSON.stringify(obj)
+              })
+
+              const data = await resp.json()
+
+              if (resp.ok) {
+
+          
+                Swal.fire({
+                  icon: 'success',
+                  title: data.msg,
+                  showConfirmButton: false,
+                  timer: 1500
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: data.msg
+                });
+              }
+
+
+            })
+
+            // Handle list/unlist button click
+            $('.list-btn').click(function() {
+              const categoryId = $(this).data('id');
+              const action = $(this).data('status');
+              
+              // Send the request to toggle the status
+              $.post('/admin/toggle-category-status', { categoryId, status: action }, function(response) {
+                if (response.success) {
+                  Swal.fire({
+                    icon: 'success',
+                    title: response.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                  }).then(() => {
+                    location.reload();
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message
+                  });
+                }
+              });
+            });
+          });
+        </script>
       </div>
     </body>
-    
+
     <%- include('../Layout/admin/footer.ejs') -%>
-    
