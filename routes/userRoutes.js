@@ -6,6 +6,7 @@ const passport = require('passport');
 const userController = require('../controllers/user/userControl');
 const userRegistration = require('../controllers/user/userRigistration');
 const userLogin = require('../controllers/user/userLogin');
+const storeController = require('../controllers/user/storeControl');
 
 router.get('/', userController.lodeHomePage);
 
@@ -30,7 +31,14 @@ router.get('/auth/google/callback', passport.authenticate('google', { failureRed
     }
 );
 
-router.get('/product', userController.loadProductDetails);
+
+// store
+router.get('/store',storeController.LoadStorePage);
+router.get('/product-details/:id',storeController.productDetails);
+
+
+
+
 router.get('/cart', userController.loadCart);
 router.get('/pro', userController.profile);
 

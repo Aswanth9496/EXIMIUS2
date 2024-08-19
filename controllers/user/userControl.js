@@ -12,15 +12,7 @@ const lodeHomePage = async (req, res) => {
     }
 }
 
-// load product details
-const loadProductDetails =async (req,res)=>{
-         try {
-            await res.render('productDetails.ejs')
-         } catch (error) {
-            console.log(error.message);
-            
-         }
-};
+
 
 //load user cart
 const loadCart =async (req,res)=>{
@@ -44,7 +36,6 @@ const profile =async (req,res)=>{
 
 module.exports = {
     lodeHomePage,
-    loadProductDetails,
     loadCart,
     profile
 }

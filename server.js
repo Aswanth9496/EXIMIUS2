@@ -12,6 +12,8 @@ const app = express();
 // Set 'public' as the static folder
 app.use(express.static(path.join(__dirname, './public/user')));
 app.use('/admin', express.static(path.join(__dirname, './public/admin')));
+app.use(express.static(path.join(__dirname, './public')));
+
 
 // Morgan for logging
 app.use(morgan('dev'));

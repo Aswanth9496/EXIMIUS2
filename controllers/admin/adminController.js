@@ -4,6 +4,9 @@ const Admin = require('../../models/adminModel')
 // load the login 
 const loadAdminLoginPage = async (req,res)=>{
     try {
+        if (req.session.admin && req.session.admin.id) {
+            return res.redirect('/admin/dashbord'); 
+        }
         res.render('adminLogin')
     } catch (error) {
         console.log(error);
@@ -20,6 +23,12 @@ const verifyadmin = async (req, res) => {
         if (existingAdmin) {
             // Check if password matches
             if (password === existingAdmin.password) {
+
+                req.session.admin = {
+                    id: existingAdmin._id,
+                    email: existingAdmin.email
+                };
+                
                 res.redirect('/admin/dashbord');
             } else {
                 // Incorrect password, show SweetAlert
@@ -56,7 +65,14 @@ const loadDashbord = async (req,res)=>{
 // logout
 const adminLogout = async(req,res)=>{
     try {
-        res.redirect('/admin');
+        req.session.destroy(err => {
+            if (err) {
+                console.log(err);
+                res.status(500).send('Server Error');
+            } else {
+                res.redirect('/admin');
+            }
+        });
     } catch (error) {
         console.log(error);
         res.status(500).send('Server Error');
